@@ -17,7 +17,7 @@ namespace Microwave.Classes.Boundary
             timer = new System.Timers.Timer();
             // Bind OnTimerEvent with an object of this, and set up the event
             timer.Elapsed += OnTimerEvent;
-            timer.Interval = 1000; // 1 second intervals
+            timer.Interval = 1000; // 1 second intervals, Interval er i sekunder
             timer.AutoReset = true;  // Repeatable timer
         }
 

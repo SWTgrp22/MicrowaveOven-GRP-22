@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using Microwave.Classes.Boundary;
 using Microwave.Classes.Controllers;
 using Microwave.Classes.Interfaces;
 using NSubstitute;
 using NUnit.Framework;
+using Timer = Microwave.Classes.Boundary.Timer;
 
 namespace Microwave.Test.Integration
 {
@@ -119,9 +121,46 @@ namespace Microwave.Test.Integration
             output.Received(1).OutputLine("PowerTube works with "+powerLevel);
             
         }
-        
 
 
+
+
+        #endregion
+
+        #region When cooking
+
+        [Test]
+        public void CookController_StartIsPressed_OutputRecivesACallFromDisplayShowTime()
+        {
+            //powerButton.Press();
+
+            //timeButton.Press();
+
+            //startButton.Press();
+
+            ////Simulere at tiden går
+            //Thread.Sleep(1000);
+
+            //output.Received(2).OutputLine("Display shows: 00:59");
+        }
+
+        [Test]
+        public void CookController_StartIsPressed_OutputRecivesACallFromPowerTube()
+        {
+
+        }
+
+        [Test]
+        public void CookController_StartIsPressed_OutputRecivesACallFromDisplayClear()
+        {
+
+        }
+
+        [Test]
+        public void CookController_StartIsPressed_OutputRecivesACallFromLight()
+        {
+
+        }
 
         #endregion
     }
