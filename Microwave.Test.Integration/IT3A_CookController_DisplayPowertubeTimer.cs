@@ -121,13 +121,70 @@ namespace Microwave.Test.Integration
             output.Received(1).OutputLine("PowerTube works with "+powerLevel);
             
         }
-
-
-
-
         #endregion
 
         #region When cooking
+
+        #region Ligth//Todo flyt til næste it-step
+        [Test]
+        public void CookController_StartIsPressed_OutputRecivesACallFromLightTurnOn()
+        {
+            //powerButton.Press();
+
+            //timeButton.Press();
+
+            //startButton.Press();
+
+            //output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("on")));
+        }
+
+        [Test]
+        public void CookController_StartIsPressed_OutputRecivesACallFromLightTurnOff()
+        {
+            //powerButton.Press();
+
+            //timeButton.Press();
+
+            //startButton.Press();
+
+            ////Simulere at tiden går
+            //Thread.Sleep(60500);
+
+            //output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("off")));
+        }
+        #endregion
+
+        #region PowerTube
+        [Test]
+        public void CookController_StartIsPressed_OutputRecivesACallFromPowerTubeTurnOn()
+        {
+            powerButton.Press();
+
+            timeButton.Press();
+
+            startButton.Press();
+
+            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("PowerTube works")));
+        }
+
+        [Test]
+        public void CookController_StartIsPressed_OutputRecivesACallFromPowerTubeTurnOff()
+        {
+            powerButton.Press();
+
+            timeButton.Press();
+
+            startButton.Press();
+
+            //Simulere at tiden går
+            Thread.Sleep(60500);
+
+            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("off")));
+        }
+
+        #endregion
+
+        #region Display
 
         [Test]
         public void CookController_StartIsPressed_OutputRecivesACallFromDisplayShowTime()
@@ -139,29 +196,9 @@ namespace Microwave.Test.Integration
             startButton.Press();
 
             //Simulere at tiden går
-            Thread.Sleep(10001);
+            Thread.Sleep(10100);
 
             output.Received(10).OutputLine(Arg.Is<string>(str =>str.Contains("00:")));
-        }
-
-        [Test]
-        public void CookController_StartIsPressed_OutputRecivesACallFromPowerTubeTurnOn()
-        {
-            powerButton.Press();
-
-            timeButton.Press();
-
-            startButton.Press();
-        }
-
-        [Test]
-        public void CookController_StartIsPressed_OutputRecivesACallFromPowerTubeTurnOff()
-        {
-            powerButton.Press();
-
-            timeButton.Press();
-
-            startButton.Press();
         }
 
         [Test]
@@ -172,17 +209,13 @@ namespace Microwave.Test.Integration
             timeButton.Press();
 
             startButton.Press();
+
+            //Simulere at tiden går
+            Thread.Sleep(60500);
+
+            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("clear")));
         }
-
-        [Test]
-        public void CookController_StartIsPressed_OutputRecivesACallFromLight()
-        {
-            powerButton.Press();
-
-            timeButton.Press();
-
-            startButton.Press();
-        }
+        #endregion
 
         #endregion
     }
