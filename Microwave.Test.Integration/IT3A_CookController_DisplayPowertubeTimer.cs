@@ -132,34 +132,56 @@ namespace Microwave.Test.Integration
         [Test]
         public void CookController_StartIsPressed_OutputRecivesACallFromDisplayShowTime()
         {
-            //powerButton.Press();
+            powerButton.Press();
 
-            //timeButton.Press();
+            timeButton.Press();
 
-            //startButton.Press();
+            startButton.Press();
 
-            ////Simulere at tiden går
-            //Thread.Sleep(1000);
+            //Simulere at tiden går
+            Thread.Sleep(10001);
 
-            //output.Received(2).OutputLine("Display shows: 00:59");
+            output.Received(10).OutputLine(Arg.Is<string>(str =>str.Contains("00:")));
         }
 
         [Test]
-        public void CookController_StartIsPressed_OutputRecivesACallFromPowerTube()
+        public void CookController_StartIsPressed_OutputRecivesACallFromPowerTubeTurnOn()
         {
+            powerButton.Press();
 
+            timeButton.Press();
+
+            startButton.Press();
+        }
+
+        [Test]
+        public void CookController_StartIsPressed_OutputRecivesACallFromPowerTubeTurnOff()
+        {
+            powerButton.Press();
+
+            timeButton.Press();
+
+            startButton.Press();
         }
 
         [Test]
         public void CookController_StartIsPressed_OutputRecivesACallFromDisplayClear()
         {
+            powerButton.Press();
 
+            timeButton.Press();
+
+            startButton.Press();
         }
 
         [Test]
         public void CookController_StartIsPressed_OutputRecivesACallFromLight()
         {
+            powerButton.Press();
 
+            timeButton.Press();
+
+            startButton.Press();
         }
 
         #endregion

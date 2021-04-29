@@ -32,7 +32,7 @@ namespace Microwave.Test.Unit
         [TestCase(-1)]
         [TestCase(0)]
         [TestCase(701)]
-        [TestCase(750)]//Todo bør disse så også ændres til at være over grænsen på 700?
+        [TestCase(750)]//Fejl: disse er ændret fra at være 1XX til at være 7XX for at implementering stemmer overens med UC beskrivelse
         public void TurnOn_WasOffOutOfRangePower_ThrowsException(int power)
         {
             Assert.Throws<System.ArgumentOutOfRangeException>(() => uut.TurnOn(power));

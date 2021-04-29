@@ -19,7 +19,7 @@ namespace Microwave.Classes.Boundary
             //Fejl: Use case siger at power skal være mellem 1 W og 700 W - før var stod der mellem 1 W og 100 W
             if (power < 1 || 700 < power)
             {
-                throw new ArgumentOutOfRangeException("power", power, "Must be between 1 and 100 (incl.)");
+                throw new ArgumentOutOfRangeException("power", power, "Must be between 1 and 700 (incl.)");
             }
 
             if (IsOn)

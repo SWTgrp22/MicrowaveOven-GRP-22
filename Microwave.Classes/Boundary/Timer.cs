@@ -17,7 +17,7 @@ namespace Microwave.Classes.Boundary
             timer = new System.Timers.Timer();
             // Bind OnTimerEvent with an object of this, and set up the event
             timer.Elapsed += OnTimerEvent;
-            timer.Interval = 1000; // 1 second intervals, Interval er i sekunder
+            timer.Interval = 1000; // 1 second intervals, Interval er i milisekunder
             timer.AutoReset = true;  // Repeatable timer
         }
 
@@ -43,7 +43,10 @@ namespace Microwave.Classes.Boundary
         {
             // One tick has passed
             // Do what I should
-            TimeRemaining -= 1000;
+
+            //TimeRemaining er i sekunder og ikke milisekunder, da den tid der gives med som paramater i Start-metoden er i sekundert 
+            //Derfor skal der trækkes 1 sekund fra og ikke 1000 sekunder, som var tilfældet før
+            TimeRemaining -= 1;
             TimerTick?.Invoke(this, EventArgs.Empty);
 
             if (TimeRemaining <= 0)
