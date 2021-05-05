@@ -66,7 +66,7 @@ namespace Microwave.Test.Integration
 
             startButton.Press();
 
-            output.Received(1).OutputLine("PowerTube works with "+powerLevel);
+            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains(powerLevel.ToString())));
             
         }
         #endregion

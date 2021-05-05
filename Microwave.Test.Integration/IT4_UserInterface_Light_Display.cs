@@ -101,7 +101,7 @@ namespace Microwave.Test.Integration
             //Simulere at tiden går
             Thread.Sleep(60500);
 
-            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("off" + "Light")));
+            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("Light is turned off")));
         }
 
         #endregion
