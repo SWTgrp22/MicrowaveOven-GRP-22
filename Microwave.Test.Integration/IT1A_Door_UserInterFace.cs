@@ -7,7 +7,7 @@ using NUnit.Framework;
 
 namespace Microwave.Test.Integration
 {
-    public class Tests
+    public class IT1A_Door_UserInterFace
     {
         private Door _sut;
         private UserInterface _UI;
