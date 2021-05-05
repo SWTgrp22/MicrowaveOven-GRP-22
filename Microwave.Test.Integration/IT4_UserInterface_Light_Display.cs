@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using Microwave.Classes.Boundary;
 using Microwave.Classes.Controllers;
 using Microwave.Classes.Interfaces;
 using NSubstitute;
 using NUnit.Framework;
+using Timer = Microwave.Classes.Boundary.Timer;
 
 namespace Microwave.Test.Integration
 {
@@ -50,7 +52,7 @@ namespace Microwave.Test.Integration
 
         #region Light
 
-        #region Door
+       #region Door
 
         [Test]
         public void door_doorIsOpen_OutputRecivesOneCallFromLightTurnOn()
@@ -87,12 +89,95 @@ namespace Microwave.Test.Integration
             output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("on")));
         }
 
+        [Test]
+        public void StartButton_StartIsPressed_OutputRecivesACallFromLightTurnOff()
+        {
+            sut_powerButton.Press();
+
+            sut_timeButton.Press();
+
+            sut_startButton.Press();
+
+            //Simulere at tiden går
+            Thread.Sleep(60500);
+
+            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("off")));
+        }
+
         #endregion
 
 
         #endregion
 
+        #region Power button
+        [TestCase(1, 50)]
+        [TestCase(2, 100)]
+        [TestCase(8, 400)]
+        [TestCase(14, 700)]
+        public void PowerButton_IsPressed_OutpuLogLineRecivesACall(int numberOfPush, int powerLevel)
+        {
+            for (int i = 0; i < numberOfPush; i++)
+            {
+                sut_powerButton.Press();
+            }
 
+            output.Received(1).OutputLine("Display shows: " + powerLevel + " W");
+        }
+
+        [Test]
+        public void PowerButton_IsPressed15Times_OutpuLogLineRecivesTwoCalls()
+        {
+            for (int i = 0; i < 15; i++)
+            {
+                sut_powerButton.Press();
+            }
+
+            output.Received(2).OutputLine("Display shows: " + 50 + " W");
+        }
+
+        #endregion
+
+
+        #region Time button
+
+        [TestCase(1, "01")]
+        [TestCase(2, "02")]
+        [TestCase(8, "08")]
+        [TestCase(14, "14")]
+        [TestCase(60, "60")]
+        [TestCase(120, "120")]
+        public void TimeButton_IsPressedMultiple_OutputLogLineRecivesACall(int NumberOfPresses, string time)
+        {
+            //State maskinen kræver at der trykkes på power-knappen før man kan begynde at indstille tiden
+            sut_powerButton.Press();
+
+            for (int i = 0; i < NumberOfPresses; i++)
+            {
+                sut_timeButton.Press();
+            }
+
+            output.Received(1).OutputLine("Display shows: " + time + ":00");
+            //jf. UC beskrivelse er det kun minutterne der stiger og ikke sekunder - derfor er seconds = 0
+        }
+
+        #endregion
+
+        #region Display
+        [Test]
+        public void StartButton_IsPressed_OutputRecivesACallFromDisplayClear()
+        {
+            sut_powerButton.Press();
+
+            sut_timeButton.Press();
+
+            sut_startButton.Press();
+
+            //Simulere at tiden går
+            Thread.Sleep(60500);
+
+            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("clear")));
+        }
+        #endregion
 
 
 

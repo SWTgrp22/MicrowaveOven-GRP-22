@@ -49,58 +49,6 @@ namespace Microwave.Test.Integration
             cookController.UI = userInterface;
         }
 
-        #region Power button
-        [TestCase(1,50)]
-        [TestCase(2, 100)]
-        [TestCase(8, 400)]
-        [TestCase(14, 700)]
-        public void CookController_PowerButtonIsPressed_OutpuLogLineRecivesACall(int numberOfPush,int powerLevel)
-        {
-            for (int i = 0; i < numberOfPush; i++)
-            {
-                powerButton.Press();
-            }
-            
-            output.Received(1).OutputLine("Display shows: "+powerLevel+" W");
-        }
-
-        [Test]
-        public void PowerButton_IsPressed15Times_OutpuLogLineRecivesTwoCalls()
-        {
-            for (int i = 0; i < 15; i++)
-            {
-                powerButton.Press();
-            }
-
-            output.Received(2).OutputLine("Display shows: " + 50 + " W");
-        }
-
-        #endregion
-
-        #region Time button
-
-        [TestCase(1, "01")]
-        [TestCase(2, "02")]
-        [TestCase(8, "08")]
-        [TestCase(14, "14")]
-        [TestCase(60, "60")]
-        [TestCase(120, "120")]
-        public void TimeButton_IsPressedMultiple_OutputLogLineRecivesACall(int NumberOfPresses, string time)
-        {
-            //State maskinen kræver at der trykkes på power-knappen før man kan begynde at indstille tiden
-            powerButton.Press();
-
-            for (int i = 0; i < NumberOfPresses; i++)
-            {
-                timeButton.Press();
-            }
-
-            output.Received(1).OutputLine("Display shows: "+time+":00");
-            //jf. UC beskrivelse er det kun minutterne der stiger og ikke sekunder - derfor er seconds = 0
-        }
-
-        #endregion
-
         #region Start Button
 
         [TestCase(1,50)]
@@ -124,36 +72,7 @@ namespace Microwave.Test.Integration
         #endregion
 
         #region When cooking
-
-        #region Ligth//Todo flyt til næste it-step
-        [Test]
-        public void CookController_StartIsPressed_OutputRecivesACallFromLightTurnOn()
-        {
-            //powerButton.Press();
-
-            //timeButton.Press();
-
-            //startButton.Press();
-
-            //output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("on")));
-        }
-
-        [Test]
-        public void CookController_StartIsPressed_OutputRecivesACallFromLightTurnOff()
-        {
-            //powerButton.Press();
-
-            //timeButton.Press();
-
-            //startButton.Press();
-
-            ////Simulere at tiden går
-            //Thread.Sleep(60500);
-
-            //output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("off")));
-        }
-        #endregion
-
+        
         #region PowerTube
         [Test]
         public void CookController_StartIsPressed_OutputRecivesACallFromPowerTubeTurnOn()
@@ -199,21 +118,6 @@ namespace Microwave.Test.Integration
             Thread.Sleep(10100);
 
             output.Received(10).OutputLine(Arg.Is<string>(str =>str.Contains("00:")));
-        }
-
-        [Test]
-        public void CookController_StartIsPressed_OutputRecivesACallFromDisplayClear()
-        {
-            powerButton.Press();
-
-            timeButton.Press();
-
-            startButton.Press();
-
-            //Simulere at tiden går
-            Thread.Sleep(60500);
-
-            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("clear")));
         }
         #endregion
 
