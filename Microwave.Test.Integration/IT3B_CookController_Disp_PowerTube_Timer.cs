@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using Microwave.Classes.Boundary;
 using Microwave.Classes.Controllers;
 using Microwave.Classes.Interfaces;
 using NSubstitute;
 using NUnit.Framework;
+using Timer = Microwave.Classes.Boundary.Timer;
 
 namespace Microwave.Test.Integration
 {
@@ -46,44 +48,6 @@ namespace Microwave.Test.Integration
             _cookController.UI = _UI;
         }
 
-        #region Extension 1
-
-        [Test]
-        public void StartButton_IsPressedDuringSetUp_outputRecivesACallfromDisplayClear()
-        {
-            //State maskinen kræver at der trykkes på power-knappen og time-knappen før man kan starte cooking
-            sut_powerButton.Press();
-
-            sut_startButton.Press();
-
-            output.Received(1).OutputLine("Display cleared");
-        }
-
-        #endregion
-
-        #region Extention 2
-
-        [Test]
-        public void Door_DoorOpensDuringSetPower_OutputRecivesACallDisplayClear()
-        {
-            sut_powerButton.Press();
-
-            sut_door.Open();
-
-            output.Received(1).OutputLine("Display cleared");
-        }
-
-        [Test]
-        public void Door_DoorOpensDuringSetTime_OutputRecivesACallDisplayClear()
-        {
-            sut_powerButton.Press();
-            sut_timeButton.Press();
-
-            sut_door.Open();
-
-            output.Received(1).OutputLine("Display cleared");
-        }
-        #endregion
 
         #region Extention 3
 
@@ -94,25 +58,15 @@ namespace Microwave.Test.Integration
             sut_timeButton.Press();
             sut_startButton.Press();
 
-            //Start-Channel butten trykkes under Cooking
-            sut_startButton.Press();
-
-            output.Received(1).OutputLine("PowerTube turned off");
-        }
-
-        [Test]
-        public void StartButton_IsPushedDuringCooking_OutputRecivesACallfromDisplayClear()
-        {
-            sut_powerButton.Press();
-            sut_timeButton.Press();
-            sut_startButton.Press();
+            //Simulere at tiden går
+            Thread.Sleep(10500);
 
             //Start-Channel butten trykkes under Cooking
             sut_startButton.Press();
 
-            output.Received(1).OutputLine("Display cleared");
+            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("PowerTube") && str.Contains("off")));
+            
         }
-
         #endregion
 
         #region Extention 4
@@ -127,20 +81,8 @@ namespace Microwave.Test.Integration
             //Døren åbnes under Cooking-state
             sut_door.Open();
 
-            output.Received(1).OutputLine("PowerTube turned off");
-        }
-
-        [Test]
-        public void Door_DoorOpensDuringCooking_OutputRecivesACallfromDisplayClear()
-        {
-            sut_powerButton.Press();
-            sut_timeButton.Press();
-            sut_startButton.Press();
-
-            //Døren åbnes under Cooking-state
-            sut_door.Open();
-
-            output.Received(1).OutputLine("Display cleared");
+            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("PowerTube") && str.Contains("off")));
+            
         }
 
         #endregion

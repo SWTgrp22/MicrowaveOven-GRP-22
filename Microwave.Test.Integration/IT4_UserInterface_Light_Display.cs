@@ -51,15 +51,15 @@ namespace Microwave.Test.Integration
         }
 
         #region Light
+        //Her testes alle metoder hvor Light kaldes fra Interfacet
 
-       #region Door
-
+        #region Door
         [Test]
         public void door_doorIsOpen_OutputRecivesOneCallFromLightTurnOn()
         {
             sut_Door.Open();
 
-            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("on")));
+            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("Light") && str.Contains("on")));
         }
 
         [Test]
@@ -70,9 +70,8 @@ namespace Microwave.Test.Integration
             sut_Door.Open();
             sut_Door.Close();
 
-            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("off")));
+            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("Light") && str.Contains("off")));
         }
-
         #endregion
 
         #region Start-Chanel Button
@@ -86,7 +85,7 @@ namespace Microwave.Test.Integration
 
             sut_startButton.Press();
 
-            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("on")));
+            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("Light") && str.Contains("on")));
         }
 
         [Test]
@@ -101,13 +100,16 @@ namespace Microwave.Test.Integration
             //Simulere at tiden går
             Thread.Sleep(60500);
 
-            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("off")));
+            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("Light") && str.Contains("off")));
         }
 
         #endregion
 
 
         #endregion
+
+        #region Display
+        //Her testes alle metoder hvor Display kaldes fra Interfacet
 
         #region Power button
         [TestCase(1, 50)]
@@ -137,7 +139,6 @@ namespace Microwave.Test.Integration
 
         #endregion
 
-
         #region Time button
 
         [TestCase(1, "01")]
@@ -162,7 +163,8 @@ namespace Microwave.Test.Integration
 
         #endregion
 
-        #region Display
+        #region Start Button
+
         [Test]
         public void StartButton_IsPressed_OutputRecivesACallFromDisplayClear()
         {
@@ -177,8 +179,103 @@ namespace Microwave.Test.Integration
 
             output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("clear")));
         }
+
         #endregion
 
+
+        #endregion
+
+
+        #region Extension 1
+
+        [Test]
+        public void StartButton_IsPressedDuringSetUp_outputRecivesACallfromDisplayClear()
+        {
+            //State maskinen kræver at der trykkes på power-knappen og time-knappen før man kan starte cooking
+            sut_powerButton.Press();
+
+            sut_startButton.Press();
+
+            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("clear")));
+        }
+        #endregion
+
+        #region Extention 2
+
+        [Test]
+        public void Door_DoorOpensDuringSetPower_OutputRecivesACallLightTurnOff()
+        {
+            sut_powerButton.Press();
+
+            sut_Door.Open();
+            //"Light is turned off"
+            //output.Received(1).OutputLine("Light is turned on");
+            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("Light") && str.Contains("on")));
+        }
+
+        [Test]
+        public void Door_DoorOpensDuringSetTime_OutputRecivesACallDisplayClear()
+        {
+            sut_powerButton.Press();
+            sut_timeButton.Press();
+
+            sut_Door.Open();
+
+            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("clear")));
+        }
+        #endregion
+
+        #region Extension 3
+        [Test]
+        public void StartButton_IsPushedDuringCooking_OutputRecivesACallfromDisplayClear()
+        {
+            sut_powerButton.Press();
+            sut_timeButton.Press();
+            sut_startButton.Press();
+
+            //Simulere at tiden går
+            Thread.Sleep(10500);
+
+            //Start-Channel butten trykkes under Cooking
+            sut_startButton.Press();
+
+            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("clear")));
+        }
+
+        [Test]
+        public void StartButton_IsPushedDuringCooking_OutputRecivesACallLightTurnOff()
+        {
+            sut_powerButton.Press();
+            sut_timeButton.Press();
+            sut_startButton.Press();
+
+            //Simulere at tiden går
+            Thread.Sleep(10500);
+
+            //Start-Channel butten trykkes under Cooking
+            sut_startButton.Press();
+
+            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("Light") && str.Contains("off")));
+        }
+
+        #endregion
+
+        #region Extension 4
+        [Test]
+        public void Door_DoorOpensDuringCooking_OutputRecivesACallfromDisplayClear()
+        {
+            sut_powerButton.Press();
+            sut_timeButton.Press();
+            sut_startButton.Press();
+
+            //Døren åbnes under Cooking-state
+            sut_Door.Open();
+
+            output.Received(1).OutputLine(Arg.Is<string>(str => str.Contains("clear")));
+        }
+
+
+        #endregion
 
 
 
